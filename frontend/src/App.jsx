@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Attendance from "./pages/Attendance";
+import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 
 function ProtectedRoute({ children }) {
@@ -26,6 +28,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/attendance" element={<Attendance />} />
+        <Route path="/messages" element={<Messages />} />
         <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
