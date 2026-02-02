@@ -29,6 +29,12 @@ router.post("/", auth, async (req, res) => {
   res.json(student);
 });
 
+router.post("/self", auth, async (req, res) => {
+  const student = new Student(req.body);
+  await student.save();
+  res.json(student);
+});
+
 // UPDATE
 router.put("/:id", auth, async (req, res) => {
   await Student.findByIdAndUpdate(req.params.id, req.body);
