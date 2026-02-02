@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <nav className="navbar navbar-dark bg-primary px-3">
       <Link to="/dashboard" className="navbar-brand">
-        SMS
+        Student Management System
       </Link>
 
       <div>
