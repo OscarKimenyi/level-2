@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css";
-import ThemeProvider from "./context/ThemeProvider";
+import ThemeProvider from "./context/ThemeProvider.jsx";
 import "./index.css";
 import App from "./App.jsx";
 
