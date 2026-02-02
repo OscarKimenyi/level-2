@@ -30,8 +30,13 @@ router.post("/", auth, async (req, res) => {
   res.json(student);
 });
 
-router.post("/self", auth, async (req, res) => {
-  const student = new Student(req.body);
+router.post("/self-register", auth, async (req, res) => {
+  const student = new Student({
+    name: req.body.name,
+    regNo: req.body.regNo,
+    course: req.body.course,
+  });
+
   await student.save();
   res.json(student);
 });

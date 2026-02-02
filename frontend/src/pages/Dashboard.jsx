@@ -31,6 +31,15 @@ export default function Dashboard() {
     setTotal(res.data.totalPages);
   };
 
+  const selfRegister = async () => {
+    await axios.post(
+      "http://localhost:5000/api/students/self-register",
+      { name, regNo, course },
+      { headers: { authorization: token } },
+    );
+    load();
+  };
+
   useEffect(() => {
     let ignore = false;
 
@@ -131,9 +140,17 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <button className="btn btn-primary mt-2" onClick={save}>
-            {editId ? "Update" : "Add"}
-          </button>
+          {role === "admin" && (
+            <button className="btn btn-primary" onClick={save}>
+              Add Student
+            </button>
+          )}
+
+          {role === "student" && (
+            <button className="btn btn-success" onClick={selfRegister}>
+              Register Myself
+            </button>
+          )}
         </>
       )}
 
