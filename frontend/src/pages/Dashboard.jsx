@@ -98,37 +98,40 @@ export default function Dashboard() {
         placeholder="Search student..."
         onChange={(e) => setSearch(e.target.value)}
       />
+      {role === "admin" && (
+        <>
+          <div className="row">
+            <div className="col">
+              <input
+                className="form-control"
+                placeholder="Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
+            <div className="col">
+              <input
+                className="form-control"
+                placeholder="Reg No"
+                value={regNo}
+                onChange={(e) => setRegNo(e.target.value)}
+              />
+            </div>
+            <div className="col">
+              <input
+                className="form-control"
+                placeholder="Course"
+                value={course}
+                onChange={(e) => setCourse(e.target.value)}
+              />
+            </div>
+          </div>
 
-      <div className="row">
-        <div className="col">
-          <input
-            className="form-control"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
-        <div className="col">
-          <input
-            className="form-control"
-            placeholder="Reg No"
-            value={regNo}
-            onChange={(e) => setRegNo(e.target.value)}
-          />
-        </div>
-        <div className="col">
-          <input
-            className="form-control"
-            placeholder="Course"
-            value={course}
-            onChange={(e) => setCourse(e.target.value)}
-          />
-        </div>
-      </div>
-
-      <button className="btn btn-primary mt-2" onClick={save}>
-        {editId ? "Update" : "Add"}
-      </button>
+          <button className="btn btn-primary mt-2" onClick={save}>
+            {editId ? "Update" : "Add"}
+          </button>
+        </>
+      )}
 
       <table className="table table-striped mt-3">
         <thead>
