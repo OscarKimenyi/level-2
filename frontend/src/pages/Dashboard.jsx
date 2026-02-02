@@ -1,93 +1,140 @@
 import axios from "axios";
-import { useEffect, useState, useCallback } from "react";
-import Loader from "../components/Loader";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import LogoutButton from "../components/LogoutButton";
+import DarkToggle from "../components/DarkToggle";
 
 export default function Dashboard() {
   const [students, setStudents] = useState([]);
   const [name, setName] = useState("");
-  const [editingId, setEditingId] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [regNo, setRegNo] = useState("");
+  const [course, setCourse] = useState("");
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(1);
+  const [search, setSearch] = useState("");
+  const [editId, setEditId] = useState(null);
 
   const token = localStorage.getItem("token");
 
-  const loadStudents = useCallback(async () => {
-    setLoading(true);
-    const res = await axios.get("http://localhost:5000/api/students", {
-      headers: { authorization: token },
-    });
-    setStudents(res.data);
-    setLoading(false);
-  }, [token]);
-
-  useEffect(() => {
-    Promise.resolve().then(loadStudents);
-  }, [loadStudents]);
-
-  const addStudent = async () => {
-    if (!name) return alert("Enter name");
-
-    await axios.post(
-      "http://localhost:5000/api/students",
-      { name },
+  const load = async () => {
+    const res = await axios.get(
+      `http://localhost:5000/api/students?search=${search}&page=${page}`,
       { headers: { authorization: token } },
     );
-
-    setName("");
-    loadStudents();
+    setStudents(res.data.students);
+    setTotal(res.data.totalPages);
   };
 
-  const deleteStudent = async (id) => {
+  useEffect(() => {
+    let ignore = false;
+
+    const fetchStudents = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/students?search=${search}&page=${page}`,
+          { headers: { authorization: token } },
+        );
+
+        if (!ignore) {
+          setStudents(res.data.students);
+          setTotal(res.data.totalPages);
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Failed to load students");
+      }
+    };
+
+    fetchStudents();
+
+    return () => {
+      ignore = true;
+    };
+  }, [page, search, token]);
+
+  const save = async () => {
+    if (editId) {
+      await axios.put(
+        `http://localhost:5000/api/students/${editId}`,
+        { name, regNo, course },
+        { headers: { authorization: token } },
+      );
+      toast.success("Updated");
+      setEditId(null);
+    } else {
+      await axios.post(
+        "http://localhost:5000/api/students",
+        { name, regNo, course },
+        { headers: { authorization: token } },
+      );
+      toast.success("Added");
+    }
+    setName("");
+    setRegNo("");
+    setCourse("");
+    load();
+  };
+
+  const del = async (id) => {
     await axios.delete(`http://localhost:5000/api/students/${id}`, {
       headers: { authorization: token },
     });
-    loadStudents();
-  };
-
-  const updateStudent = async (id) => {
-    await axios.put(
-      `http://localhost:5000/api/students/${id}`,
-      { name },
-      { headers: { authorization: token } },
-    );
-    setEditingId(null);
-    setName("");
-    loadStudents();
+    toast.success("Deleted");
+    load();
   };
 
   return (
     <div className="container mt-4">
-      <div className="d-flex justify-content-between">
-        <h2>Students</h2>
-        <LogoutButton />
+      <div className="d-flex justify-content-between mb-3">
+        <h3>Student Management</h3>
+        <div>
+          <DarkToggle /> <LogoutButton />
+        </div>
       </div>
 
       <input
-        className="form-control"
-        placeholder="Student Name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        className="form-control mb-2"
+        placeholder="Search student..."
+        onChange={(e) => setSearch(e.target.value)}
       />
 
-      {editingId ? (
-        <button
-          className="btn btn-warning mt-2"
-          onClick={() => updateStudent(editingId)}
-        >
-          Update
-        </button>
-      ) : (
-        <button className="btn btn-success mt-2" onClick={addStudent}>
-          Add
-        </button>
-      )}
+      <div className="row">
+        <div className="col">
+          <input
+            className="form-control"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+        <div className="col">
+          <input
+            className="form-control"
+            placeholder="Reg No"
+            value={regNo}
+            onChange={(e) => setRegNo(e.target.value)}
+          />
+        </div>
+        <div className="col">
+          <input
+            className="form-control"
+            placeholder="Course"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+          />
+        </div>
+      </div>
 
-      {loading && <Loader />}
+      <button className="btn btn-primary mt-2" onClick={save}>
+        {editId ? "Update" : "Add"}
+      </button>
 
-      <table className="table mt-3">
+      <table className="table table-striped mt-3">
         <thead>
           <tr>
             <th>Name</th>
+            <th>RegNo</th>
+            <th>Course</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -96,12 +143,16 @@ export default function Dashboard() {
           {students.map((s) => (
             <tr key={s._id}>
               <td>{s.name}</td>
+              <td>{s.regNo}</td>
+              <td>{s.course}</td>
               <td>
                 <button
                   className="btn btn-sm btn-info"
                   onClick={() => {
-                    setEditingId(s._id);
+                    setEditId(s._id);
                     setName(s.name);
+                    setRegNo(s.regNo);
+                    setCourse(s.course);
                   }}
                 >
                   Edit
@@ -109,7 +160,7 @@ export default function Dashboard() {
 
                 <button
                   className="btn btn-sm btn-danger ms-2"
-                  onClick={() => deleteStudent(s._id)}
+                  onClick={() => del(s._id)}
                 >
                   Delete
                 </button>
@@ -118,6 +169,18 @@ export default function Dashboard() {
           ))}
         </tbody>
       </table>
+
+      <div className="mt-2">
+        {[...Array(total)].map((_, i) => (
+          <button
+            key={i}
+            className="btn btn-sm btn-secondary me-1"
+            onClick={() => setPage(i + 1)}
+          >
+            {i + 1}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
