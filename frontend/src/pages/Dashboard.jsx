@@ -139,48 +139,50 @@ export default function Dashboard() {
 
       <ExportButtons students={students} />
 
-      <table className="table table-striped mt-3">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>RegNo</th>
-            <th>Course</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {students.map((s) => (
-            <tr key={s._id}>
-              <td>{s.name}</td>
-              <td>{s.regNo}</td>
-              <td>{s.course}</td>
-              <td>
-                <button
-                  className="btn btn-sm btn-info"
-                  onClick={() => {
-                    setEditId(s._id);
-                    setName(s.name);
-                    setRegNo(s.regNo);
-                    setCourse(s.course);
-                  }}
-                >
-                  Edit
-                </button>
-
-                {role === "admin" && (
-                  <button
-                    className="btn btn-sm btn-danger ms-2"
-                    onClick={() => del(s._id)}
-                  >
-                    Delete
-                  </button>
-                )}
-              </td>
+      <div className="col-md-8 dashboard-card">
+        <table className="table table-striped mt-3">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>RegNo</th>
+              <th>Course</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {students.map((s) => (
+              <tr key={s._id}>
+                <td>{s.name}</td>
+                <td>{s.regNo}</td>
+                <td>{s.course}</td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-info"
+                    onClick={() => {
+                      setEditId(s._id);
+                      setName(s.name);
+                      setRegNo(s.regNo);
+                      setCourse(s.course);
+                    }}
+                  >
+                    Edit
+                  </button>
+
+                  {role === "admin" && (
+                    <button
+                      className="btn btn-sm btn-danger ms-2"
+                      onClick={() => del(s._id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       <div className="mt-2">
         {[...Array(total)].map((_, i) => (
@@ -193,9 +195,10 @@ export default function Dashboard() {
           </button>
         ))}
       </div>
-
-      <StatsChart students={students} />
-      <CourseChart students={students} />
+      <div className="col-md-4 dashboard-card">
+        <StatsChart students={students} />
+        <CourseChart students={students} />
+      </div>
     </div>
   );
 }
