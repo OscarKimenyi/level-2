@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import DarkToggle from "./DarkToggle";
-import LogoutButton from "./LogoutButton";
+import ProfileMenu from "./ProfileMenu";
 
 export default function Navbar() {
   return (
@@ -10,12 +10,9 @@ export default function Navbar() {
       </Link>
 
       <div>
-        <Link to="/profile" className="text-white me-3">
-          Profile
-        </Link>
         <DarkToggle />
         <span className="ms-3">
-          <LogoutButton />
+          <ProfileMenu />
         </span>
       </div>
     </nav>
