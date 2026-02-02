@@ -5,6 +5,7 @@ import LogoutButton from "../components/LogoutButton";
 import DarkToggle from "../components/DarkToggle";
 
 export default function Dashboard() {
+  const role = localStorage.getItem("role");
   const [students, setStudents] = useState([]);
   const [name, setName] = useState("");
   const [regNo, setRegNo] = useState("");
@@ -158,12 +159,14 @@ export default function Dashboard() {
                   Edit
                 </button>
 
-                <button
-                  className="btn btn-sm btn-danger ms-2"
-                  onClick={() => del(s._id)}
-                >
-                  Delete
-                </button>
+                {role === "admin" && (
+                  <button
+                    className="btn btn-sm btn-danger ms-2"
+                    onClick={() => del(s._id)}
+                  >
+                    Delete
+                  </button>
+                )}
               </td>
             </tr>
           ))}
