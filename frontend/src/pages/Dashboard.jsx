@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import LogoutButton from "../components/LogoutButton";
 import DarkToggle from "../components/DarkToggle";
 import StatsChart from "../components/StatsChart";
+import ExportButtons from "../components/ExportButtons";
 
 export default function Dashboard() {
   const role = localStorage.getItem("role");
@@ -135,6 +136,7 @@ export default function Dashboard() {
       )}
 
       <StatsChart students={students} />
+      <ExportButtons students={students} />
 
       <table className="table table-striped mt-3">
         <thead>
