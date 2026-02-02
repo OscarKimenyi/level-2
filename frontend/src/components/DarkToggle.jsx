@@ -5,8 +5,11 @@ export default function DarkToggle() {
   const { dark, setDark } = useContext(ThemeContext);
 
   return (
-    <button className="btn btn-secondary" onClick={() => setDark(!dark)}>
-      {dark ? "Light Mode" : "Dark Mode"}
-    </button>
+    <span
+      style={{ cursor: "pointer", fontSize: "22px" }}
+      onClick={() => setDark(!dark)}
+    >
+      {dark ? "☀️" : "🌙"}
+    </span>
   );
 }
