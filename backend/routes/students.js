@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const Student = require("../models/Student");
+const upload = require("../middleware/upload");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
@@ -33,6 +34,10 @@ router.post("/self", auth, async (req, res) => {
   const student = new Student(req.body);
   await student.save();
   res.json(student);
+});
+
+router.post("/photo", upload.single("photo"), async (req, res) => {
+  res.json({ path: req.file.filename });
 });
 
 // UPDATE
