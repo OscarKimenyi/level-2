@@ -4,7 +4,7 @@ export default function StatsChart({ students }) {
   const data = [{ name: "Students", total: students.length }];
 
   return (
-    <BarChart width={300} height={200} data={data}>
+    <BarChart width={500} height={400} data={data}>
       <XAxis dataKey="name" />
       <YAxis />
       <Tooltip />
