@@ -23,7 +23,7 @@ export default function Login() {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center vh-100">
+    <div className="container-fluid d-flex justify-content-center align-items-center vh-100">
       <div className="card p-4 col-md-4 shadow">
         <h3 className="text-center mb-3">Login</h3>
 

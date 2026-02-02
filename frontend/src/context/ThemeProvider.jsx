@@ -9,8 +9,8 @@ export default function ThemeProvider({ children }) {
       <div
         className={
           dark
-            ? "bg-dark text-light min-vh-100"
-            : "bg-light text-dark min-vh-100"
+            ? "bg-dark text-light app-wrapper"
+            : "bg-light text-dark app-wrapper"
         }
       >
         {children}

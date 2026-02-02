@@ -84,7 +84,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid p-4">
       <div className="d-flex justify-content-between mb-3">
         <h3>Student Management</h3>
         <div>

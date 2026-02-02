@@ -1,29 +1,30 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 
-const Protected = ({ children }) => {
+function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
-  return token ? children : <Login />;
-};
+  return token ? children : <Navigate to="/" />;
+}
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+
         <Route path="/register" element={<Register />} />
+
         <Route
           path="/dashboard"
           element={
-            <Protected>
+            <ProtectedRoute>
               <Dashboard />
-            </Protected>
+            </ProtectedRoute>
           }
         />
-        <ToastContainer />
       </Routes>
     </BrowserRouter>
   );
