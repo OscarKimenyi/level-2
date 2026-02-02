@@ -5,10 +5,19 @@ const jwt = require("jsonwebtoken");
 
 // Register
 router.post("/register", async (req, res) => {
-  const hash = await bcrypt.hash(req.body.password, 10);
-  const user = new User({ ...req.body, password: hash });
+  const { name, email, password, role } = req.body;
+
+  const hash = await bcrypt.hash(password, 10);
+
+  const user = new User({
+    name,
+    email,
+    password: hash,
+    role,
+  });
+
   await user.save();
-  res.json({ message: "Registered" });
+  res.json("Registered");
 });
 
 // Login
