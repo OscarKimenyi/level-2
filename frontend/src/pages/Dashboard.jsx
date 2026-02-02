@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import LogoutButton from "../components/LogoutButton";
 import DarkToggle from "../components/DarkToggle";
+import StatsChart from "../components/StatsChart";
 
 export default function Dashboard() {
   const role = localStorage.getItem("role");
@@ -132,6 +133,8 @@ export default function Dashboard() {
           </button>
         </>
       )}
+
+      <StatsChart students={students} />
 
       <table className="table table-striped mt-3">
         <thead>
