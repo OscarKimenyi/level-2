@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 import LogoutButton from "../components/LogoutButton";
 import DarkToggle from "../components/DarkToggle";
 import StatsChart from "../components/StatsChart";
+import CourseChart from "../components/CourseChart";
 import ExportButtons from "../components/ExportButtons";
 
 export default function Dashboard() {
@@ -189,6 +190,7 @@ export default function Dashboard() {
       </div>
 
       <StatsChart students={students} />
+      <CourseChart students={students} />
     </div>
   );
 }
