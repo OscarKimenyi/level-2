@@ -1,196 +1,72 @@
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 export default function Register() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    name: "",
-  });
-  const [error, setError] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    // Clear error when user starts typing
-    if (error) setError("");
-  };
-
-  const validateForm = () => {
-    if (!formData.name.trim()) {
-      setError("Name is required");
-      return false;
-    }
-
-    if (!formData.email.includes("@")) {
-      setError("Please enter a valid email address");
-      return false;
-    }
-
-    if (formData.password.length < 6) {
-      setError("Password must be at least 6 characters long");
-      return false;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return false;
-    }
-
-    return true;
-  };
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("student");
+  const [show, setShow] = useState(false);
 
   const register = async () => {
-    if (!validateForm()) return;
-
-    setIsLoading(true);
-    setError("");
-
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", {
-        email: formData.email,
-        password: formData.password,
-        name: formData.name,
+      await axios.post("http://localhost:5000/api/auth/register", {
+        name,
+        email,
+        password,
+        role,
       });
-
-      localStorage.setItem("token", res.data.token);
-      window.location = "/dashboard";
-    } catch (error) {
-      if (error.response?.status === 409) {
-        setError("Email already registered");
-      } else if (error.response?.data?.message) {
-        setError(error.response.data.message);
-      } else {
-        setError("Registration failed. Please try again.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      register();
+      toast.success("Registered successfully");
+      window.location = "/";
+    } catch {
+      toast.error("Registration failed");
     }
   };
 
   return (
-    <div className="container" style={{ maxWidth: "400px", marginTop: "50px" }}>
-      <div className="card">
-        <div className="card-body">
-          <h2 className="card-title text-center mb-4">Create Account</h2>
+    <div className="container d-flex justify-content-center align-items-center vh-100">
+      <div className="card p-4 col-md-4 shadow">
+        <h3 className="text-center">Register</h3>
 
-          {error && (
-            <div className="alert alert-danger" role="alert">
-              {error}
-            </div>
-          )}
+        <input
+          className="form-control mt-2"
+          placeholder="Name"
+          onChange={(e) => setName(e.target.value)}
+        />
 
-          <div className="mb-3">
-            <label htmlFor="name" className="form-label">
-              Full Name
-            </label>
-            <input
-              id="name"
-              name="name"
-              className="form-control"
-              placeholder="Enter your full name"
-              value={formData.name}
-              onChange={handleChange}
-              onKeyPress={handleKeyPress}
-            />
-          </div>
+        <input
+          className="form-control mt-2"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
-          <div className="mb-3">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className="form-control"
-              placeholder="Enter your email"
-              value={formData.email}
-              onChange={handleChange}
-              onKeyPress={handleKeyPress}
-            />
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <div className="input-group">
-              <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                className="form-control"
-                placeholder="Create password (min. 6 characters)"
-                value={formData.password}
-                onChange={handleChange}
-                onKeyPress={handleKeyPress}
-              />
-              <button
-                className="btn btn-outline-secondary"
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? "Hide" : "Show"}
-              </button>
-            </div>
-          </div>
-
-          <div className="mb-3">
-            <label htmlFor="confirmPassword" className="form-label">
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              name="confirmPassword"
-              type="password"
-              className="form-control"
-              placeholder="Confirm your password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              onKeyPress={handleKeyPress}
-            />
-          </div>
-
+        <div className="input-group mt-2">
+          <input
+            className="form-control"
+            type={show ? "text" : "password"}
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
           <button
-            className="btn btn-primary w-100"
-            onClick={register}
-            disabled={isLoading}
+            className="btn btn-outline-secondary"
+            onClick={() => setShow(!show)}
           >
-            {isLoading ? (
-              <>
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                ></span>
-                Creating Account...
-              </>
-            ) : (
-              "Register"
-            )}
+            👁
           </button>
-
-          <hr className="my-4" />
-
-          <p className="text-center mb-0">
-            Already have an account?{" "}
-            <a href="/login" className="text-decoration-none">
-              Sign In
-            </a>
-          </p>
         </div>
+
+        <select
+          className="form-control mt-2"
+          onChange={(e) => setRole(e.target.value)}
+        >
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button className="btn btn-success mt-3" onClick={register}>
+          Register
+        </button>
       </div>
     </div>
   );
