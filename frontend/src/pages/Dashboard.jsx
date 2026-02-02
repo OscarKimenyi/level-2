@@ -90,13 +90,7 @@ export default function Dashboard() {
   return (
     <div className="container-fluid p-4">
       <Navbar />
-      <div className="d-flex justify-content-between mb-3">
-        <h3>Student Management</h3>
-        <div>
-          <DarkToggle /> <LogoutButton />
-        </div>
-      </div>
-
+      <br />
       <input
         className="form-control mb-2"
         placeholder="Search student..."
