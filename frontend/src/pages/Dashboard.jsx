@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Navbar from "../components/Navbar";
 import LogoutButton from "../components/LogoutButton";
 import DarkToggle from "../components/DarkToggle";
 import StatsChart from "../components/StatsChart";
@@ -88,6 +89,7 @@ export default function Dashboard() {
 
   return (
     <div className="container-fluid p-4">
+      <Navbar />
       <div className="d-flex justify-content-between mb-3">
         <h3>Student Management</h3>
         <div>
@@ -135,7 +137,6 @@ export default function Dashboard() {
         </>
       )}
 
-      <StatsChart students={students} />
       <ExportButtons students={students} />
 
       <table className="table table-striped mt-3">
@@ -192,6 +193,8 @@ export default function Dashboard() {
           </button>
         ))}
       </div>
+
+      <StatsChart students={students} />
     </div>
   );
 }
