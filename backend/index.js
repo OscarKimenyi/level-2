@@ -15,5 +15,6 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/students", require("./routes/students"));
 app.use("/uploads", express.static("uploads"));
 app.use("/api/attendance", require("./routes/attendance"));
+app.use("/api/messages", require("./routes/messages"));
 
 app.listen(5000, () => console.log("Server running"));
