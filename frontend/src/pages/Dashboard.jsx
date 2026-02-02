@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [name, setName] = useState("");
   const [regNo, setRegNo] = useState("");
   const [course, setCourse] = useState("");
+  const courses = ["IT", "Computer Science", "Business", "Engineering"];
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(1);
   const [search, setSearch] = useState("");
@@ -117,12 +118,16 @@ export default function Dashboard() {
               />
             </div>
             <div className="col">
-              <input
+              <select
                 className="form-control"
-                placeholder="Course"
                 value={course}
                 onChange={(e) => setCourse(e.target.value)}
-              />
+              >
+                <option>Select Course</option>
+                {courses.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
             </div>
           </div>
 
