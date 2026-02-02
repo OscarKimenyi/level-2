@@ -1,66 +1,123 @@
-import axios from 'axios'
-import {useEffect,useState} from 'react'
+import axios from "axios";
+import { useEffect, useState, useCallback } from "react";
+import Loader from "../components/Loader";
+import LogoutButton from "../components/LogoutButton";
 
-
-export default function Dashboard(){
+export default function Dashboard() {
   const [students, setStudents] = useState([]);
   const [name, setName] = useState("");
+  const [editingId, setEditingId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token");
 
-  const load = async () => {
+  const loadStudents = useCallback(async () => {
+    setLoading(true);
     const res = await axios.get("http://localhost:5000/api/students", {
       headers: { authorization: token },
     });
     setStudents(res.data);
-  };
-
-  useEffect(() => {
-    let isMounted = true;
-    const fetchStudents = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/students", {
-          headers: { authorization: token },
-        });
-        if (isMounted) setStudents(res.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchStudents();
-    return () => {
-      isMounted = false;
-    };
+    setLoading(false);
   }, [token]);
 
-  const add = async () => {
+  useEffect(() => {
+    Promise.resolve().then(loadStudents);
+  }, [loadStudents]);
+
+  const addStudent = async () => {
+    if (!name) return alert("Enter name");
+
     await axios.post(
       "http://localhost:5000/api/students",
       { name },
       { headers: { authorization: token } },
     );
-    load();
-  }
+
+    setName("");
+    loadStudents();
+  };
+
+  const deleteStudent = async (id) => {
+    await axios.delete(`http://localhost:5000/api/students/${id}`, {
+      headers: { authorization: token },
+    });
+    loadStudents();
+  };
+
+  const updateStudent = async (id) => {
+    await axios.put(
+      `http://localhost:5000/api/students/${id}`,
+      { name },
+      { headers: { authorization: token } },
+    );
+    setEditingId(null);
+    setName("");
+    loadStudents();
+  };
 
   return (
-    <div className="container">
-      <h2>Students</h2>
+    <div className="container mt-4">
+      <div className="d-flex justify-content-between">
+        <h2>Students</h2>
+        <LogoutButton />
+      </div>
+
       <input
         className="form-control"
         placeholder="Student Name"
+        value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <button className="btn btn-success mt-2" onClick={add}>
-        Add
-      </button>
 
-      <ul className="list-group mt-3">
-        {students.map((s) => (
-          <li key={s._id} className="list-group-item">
-            {s.name}
-          </li>
-        ))}
-      </ul>
+      {editingId ? (
+        <button
+          className="btn btn-warning mt-2"
+          onClick={() => updateStudent(editingId)}
+        >
+          Update
+        </button>
+      ) : (
+        <button className="btn btn-success mt-2" onClick={addStudent}>
+          Add
+        </button>
+      )}
+
+      {loading && <Loader />}
+
+      <table className="table mt-3">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {students.map((s) => (
+            <tr key={s._id}>
+              <td>{s.name}</td>
+              <td>
+                <button
+                  className="btn btn-sm btn-info"
+                  onClick={() => {
+                    setEditingId(s._id);
+                    setName(s.name);
+                  }}
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="btn btn-sm btn-danger ms-2"
+                  onClick={() => deleteStudent(s._id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
