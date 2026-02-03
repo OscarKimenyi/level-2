@@ -1,41 +1,495 @@
-/* html,
-body,
-#root {
-  height: 100%;
+/* Reset and Base Styles */
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.app-wrapper {
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --light-bg: #f8f9fa;
+  --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --hover-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  --dark-bg: #121212;
+  --dark-card: #1e1e1e;
+  --dark-border: #333;
+  --dark-text: #f8f9fa;
+  --dark-muted: #b0b0b0;
+}
+
+/* Base body styles */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+/* Navbar - Always stays light/gradient */
+.navbar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+  padding: 1rem 2rem !important;
+  position: relative;
+  z-index: 1030;
+}
+
+/* Navbar brand text - always white */
+.navbar-brand {
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  letter-spacing: 0.5px !important;
+  color: white !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+.navbar-brand div span:first-child {
+  color: white !important;
+}
+
+.navbar-brand div span:last-child {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Force all navbar children to stay with light mode colors */
+.navbar * {
+  color: white !important;
+}
+
+.navbar .text-white {
+  color: white !important;
+}
+
+.navbar .text-light {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Dark toggle button in navbar */
+.navbar .btn-outline-light {
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.navbar .btn-outline-light:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+/* Dark Mode - Everything except navbar */
+/* body.dark-mode {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
 } */
 
-body {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  font-family: "Segoe UI", sans-serif;
+/* Dark mode should NEVER affect navbar or its children */
+body.dark-mode .navbar,
+body.dark-mode .navbar *,
+body.dark-mode .navbar div,
+body.dark-mode .navbar span,
+body.dark-mode .navbar a,
+body.dark-mode .navbar button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Profile dropdown menu - ensure it's visible */
+.dropdown-menu {
+  background: white !important;
+  color: #333 !important;
+  border: 1px solid #e0e0e0 !important;
+}
+
+body.dark-mode .dropdown-menu {
+  background: #2d2d2d !important;
+  color: #f8f9fa !important;
+  border: 1px solid #444 !important;
+}
+
+body.dark-mode .dropdown-item {
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: #3d3d3d !important;
+}
+
+body.dark-mode .dropdown-header {
+  background-color: #2d2d2d !important;
+  color: #f8f9fa !important;
+}
+
+body.dark-mode .dropdown-header .text-muted {
+  color: #b0b0b0 !important;
+}
+
+/* Reset any dark mode classes that might affect navbar */
+body.dark-mode .navbar,
+body.dark-mode .navbar * {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  background-color: transparent !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Explicitly override any potential dark mode inheritance */
+.navbar,
+.navbar *,
+[class*="navbar-"] {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}
+
+/* Use !important to override any dark mode styles */
+body.dark-mode .navbar *:not(.dropdown-menu):not(.dropdown-menu *) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}
+body.dark-mode .container-fluid:not(.navbar),
+body.dark-mode .container:not(.navbar),
+body.dark-mode .row:not(.navbar *),
+body.dark-mode .col:not(.navbar *) {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+/* Dashboard specific dark mode */
+body.dark-mode .dashboard-card {
+  background-color: var(--dark-card) !important;
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+}
+
+/* Card Styling for Dark Mode */
+body.dark-mode .card:not(.navbar *) {
+  background-color: var(--dark-card) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .card-header {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  border-bottom: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .card-title {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .text-muted {
+  color: var(--dark-muted) !important;
+}
+
+/* Table Styling for Dark Mode */
+body.dark-mode .table {
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .table th {
+  background: linear-gradient(135deg, #555 0%, #333 100%) !important;
+  color: var(--dark-text) !important;
+  border-bottom: 2px solid var(--dark-border) !important;
+}
+
+body.dark-mode .table td {
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+  background-color: transparent !important;
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-mode .table-striped tbody tr:nth-of-type(even) {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+body.dark-mode .table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Table Info row for editing */
+body.dark-mode .table-info {
+  background-color: rgba(102, 126, 234, 0.2) !important;
+  color: var(--dark-text) !important;
+}
+
+/* Badges in Dark Mode */
+body.dark-mode .badge.bg-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+}
+
+body.dark-mode .badge.bg-primary.bg-opacity-10 {
+  background: rgba(102, 126, 234, 0.3) !important;
+  color: #a0b0ff !important;
+  border: 1px solid rgba(102, 126, 234, 0.5) !important;
+}
+
+/* Form Controls in Dark Mode */
+body.dark-mode .form-control {
+  background-color: #2d2d2d !important;
+  border-color: #444 !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .form-control:focus {
+  background-color: #2d2d2d !important;
+  border-color: #667eea !important;
+  color: var(--dark-text) !important;
+  box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25) !important;
+}
+
+body.dark-mode .form-control::placeholder {
+  color: #999 !important;
+}
+
+body.dark-mode .input-group-text {
+  background-color: #3d3d3d !important;
+  border-color: #444 !important;
+  color: var(--dark-muted) !important;
+}
+
+/* Buttons in Dark Mode */
+body.dark-mode .btn-outline-primary {
+  color: #a0b0ff !important;
+  border-color: #667eea !important;
+}
+
+body.dark-mode .btn-outline-primary:hover {
+  background-color: #667eea !important;
+  color: white !important;
+}
+
+body.dark-mode .btn-outline-secondary {
+  color: #ccc !important;
+  border-color: #666 !important;
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+  background-color: #666 !important;
+  color: white !important;
+}
+
+body.dark-mode .btn-outline-danger {
+  color: #ff6b6b !important;
+  border-color: #ff4757 !important;
+}
+
+body.dark-mode .btn-outline-danger:hover {
+  background-color: #ff4757 !important;
+  color: white !important;
+}
+
+/* Dropdown in Dark Mode */
+body.dark-mode .dropdown-menu {
+  background-color: var(--dark-card) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .dropdown-item {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+body.dark-mode .dropdown-header {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  border-bottom-color: var(--dark-border) !important;
+}
+
+body.dark-mode .dropdown-divider {
+  border-top-color: var(--dark-border) !important;
+}
+
+/* Pagination in Dark Mode */
+body.dark-mode .pagination .page-link {
+  background-color: #2d2d2d !important;
+  border-color: #444 !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .pagination .page-item.active .page-link {
+  background-color: #667eea !important;
+  border-color: #667eea !important;
+  color: white !important;
+}
+
+body.dark-mode .pagination .page-item.disabled .page-link {
+  background-color: #2d2d2d !important;
+  color: #666 !important;
+}
+
+/* Avatar Circle */
+.avatar-circle {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 700 !important;
+  font-size: 18px !important;
+  color: white !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  text-transform: uppercase !important;
+}
+
+.avatar-circle.small {
+  width: 36px !important;
+  height: 36px !important;
+  font-size: 16px !important;
+}
+
+/* Spinner */
+body.dark-mode .spinner-border.text-primary {
+  color: #667eea !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .navbar-brand {
+    font-size: 1.2rem !important;
+  }
+
+  .navbar {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .card {
+    margin: 0.5rem !important;
+    padding: 1rem !important;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Auth Containers */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .auth-card {
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+/* Light Mode Specific Styles (Default) */
+.card {
+  border: none;
+  border-radius: 20px !important;
+  box-shadow: var(--card-shadow);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  overflow: hidden;
   background: white;
-  padding: 30px;
-  border-radius: 12px;
-  width: 350px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  color: #333;
 }
 
-.form-control {
-  border-radius: 10px;
-  padding: 12px;
-}
-
-.btn {
-  border-radius: 20px;
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--hover-shadow);
 }
 
 .dashboard-card {
   background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--card-shadow);
+  margin: 1rem 0;
+}
+
+.table {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(102, 126, 234, 0.05) !important;
+}
+
+.table th {
+  background: var(--primary-gradient) !important;
+  color: white !important;
+  border: none !important;
+  padding: 1rem !important;
+  font-weight: 600 !important;
+}
+
+.table td {
+  padding: 1rem !important;
+  vertical-align: middle !important;
+  border-color: #f0f0f0 !important;
+}
+
+/* Button Styling */
+.btn {
+  border-radius: 50px !important;
+  padding: 0.5rem 1.5rem !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  border: none !important;
+}
+
+.btn-primary {
+  background: var(--primary-gradient) !important;
+  color: white !important;
+}
+
+.btn-success {
+  background: var(--secondary-gradient) !important;
+  color: white !important;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+.text-light {
+  color: rgb(211, 223, 235) !important;
+}
+
+/* Form Styling */
+.form-control {
+  border-radius: 50px !important;
+  padding: 0.75rem 1.5rem !important;
+  border: 2px solid #e0e0e0 !important;
+  transition: all 0.3s ease !important;
+  background: white;
+  color: #333;
+}
+
+.form-control:focus {
+  border-color: #667eea !important;
+  box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25) !important;
 }
