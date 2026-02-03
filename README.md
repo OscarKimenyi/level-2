@@ -60,7 +60,7 @@ The system supports authentication, role-based access (Admin & Student), student
 ## 📁 Project Structure
 
 ```
-student-management-system-level2/
+level-2/
 │
 ├── backend       
 └── frontend
@@ -73,8 +73,8 @@ student-management-system-level2/
 ### 1️⃣ Clone Repository
 
 ```
-git clone https://github.com/yourusername/student-management-system-level2.git
-cd student-management-system-level2
+git clone https://github.com/yourusername/level-2.git
+cd level-2
 ```
 
 ---
