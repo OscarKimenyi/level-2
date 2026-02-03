@@ -41,8 +41,8 @@ router.post("/self-register", auth, async (req, res) => {
   res.json(student);
 });
 
-router.post("/photo", upload.single("photo"), async (req, res) => {
-  res.json({ path: req.file.filename });
+router.post("/upload-photo", upload.single("photo"), async (req, res) => {
+  res.json({ filename: req.file.filename });
 });
 
 // UPDATE
